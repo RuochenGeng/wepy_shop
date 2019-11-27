@@ -1,13 +1,98 @@
 <template>
-  <view>home</view>
+  <!-- 轮播图 -->
+  <view>
+    <swiper circular indicator-dots autoplay>
+      <swiper-item wx:for="{{swiperList}}" wx:key="index">
+        <navigator url="{{item.navigator_url}}" open-type="{{item.open_type}}">
+          <image src="{{item.image_src}}" />>
+        </navigator>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 分类区域 -->
+  <view class="cates">
+    <block wx:for="{{cateItems}}" wx:key="index">
+      <navigator
+        url="/pages/tabs/cates"
+        open-type="{{item.open_type}}"
+        wx:if="{{item.open_type !== underfined}}"
+        hover-class="none"
+      >
+        <image src="{{item.image_src}}" />
+      </navigator>
+      <image src="{{item.image_src}}" wx:else />
+    </block>
+  </view>
+
+  <!-- 楼层区域 -->
+  <view class="floor_container">
+    <view class="floor_item" wx:for="{{floorList}}" wx:key="index">
+      <!-- 标题 -->
+      <image class="floor_item_img" src="{{item.floor_title.image_src}}" />
+      <!-- 图片 -->
+      <view class="floor_img_box">
+        <image
+          class="floor_item_pic"
+          src="{{prod.image_src}}"
+          style="width:{{prod.image_width}}rpx"
+          wx:for="{{item.product_list}}"
+          wx:key="index"
+          wx:for-item="prod"
+          @tap="goGoodsList({{prod.navigator_url}})"
+        />
+      </view>
+    </view>
+  </view>
 </template>
+
+
+
 <script>
 import wepy from 'wepy'
+import mix from '@/mixins/tabs/home.js'
 export default class extends wepy.page {
   config = {}
-  data = {}
-  methods = {}
+  mixins = [mix]
 }
 </script>
 <style lang="less">
+swiper {
+  height: 350rpx;
+  navigator,
+  image {
+    height: 100%;
+    width: 100%;
+  }
+}
+.cates {
+  display: flex;
+  margin: 40rpx 0;
+  justify-content: space-around;
+  image {
+    width: 128rpx;
+    height: 140rpx;
+  }
+}
+.floor_container {
+  .floor_item {
+    .floor_item_img {
+      display: block;
+      height: 50rpx;
+      width: 640rpx;
+    }
+  }
+  .floor_img_box {
+    .floor_item_pic {
+      float: left;
+      height: 190rpx;
+      margin: 8rpx;
+      margin-top: 0;
+
+      &:nth-child(1) {
+        height: 390rpx;
+      }
+    }
+  }
+}
 </style>
