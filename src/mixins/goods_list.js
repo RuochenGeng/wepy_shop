@@ -7,17 +7,25 @@ export default class extends wepy.mixin {
     pagenum: 1,
     pagesize: 10,
     goodsList: [],
-    total: 0
+    total: 0,
+    isOver: false,
+    isLoading: false
   }
-  methods = {}
+  methods = {
+    goGoodsDatail(id) {
+      wepy.navigateTo({
+        url: '/pages/goods_detail/main?goods_id=' + id
+      })
+    }
+  }
   onLoad(options) {
-    console.log(options)
     this.query = options.query || ''
     this.cid = options.cid || ''
     this.getGoodList()
   }
   // 获取商品列表数据
   async getGoodList() {
+    this.isLoading = true
     const {
       data: res
     } = await wepy.get('/goods/search', {
@@ -31,11 +39,28 @@ export default class extends wepy.mixin {
     }
     this.goodsList = [...this.goodsList, ...res.message.goods]
     this.total = res.message.total
-    console.log(res)
+    this.isLoading = false
     this.$apply()
+    wepy.stopPullDownRefresh()
   }
+  // 触底操作
   onReachBottom() {
+    if (this.isLoading) {
+      return
+    }
+    if (this.pagenum * this.pagesize >= this.total) {
+      this.isOver = true
+      return
+    }
     this.pagenum++
+    this.getGoodList()
+  }
+  // 下拉刷新
+  onPullDownRefresh() {
+    this.pagenum = 1,
+      this.total = 0,
+      this.goodsList = [],
+      this.isOver = this.isLoading = false
     this.getGoodList()
   }
 }

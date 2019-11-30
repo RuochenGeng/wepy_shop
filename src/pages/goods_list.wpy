@@ -7,9 +7,13 @@
         price="{{item.goods_price}}"
         title="{{item.goods_name}}"
         thumb="{{ item.goods_small_logo }}"
+        @tap="goGoodsDatail({{item.goods_id}})"
       />
       <view class="sep_line"></view>
     </block>
+
+    <!-- 底部消息 -->
+    <view class="over_line" hidden="{{!isOver}}">---------到底了---------</view>
   </view>
 </template>
 <script>
@@ -18,7 +22,9 @@ import mix from '@/mixins/goods_list.js'
 export default class extends wepy.page {
   config = {
     navigationBarTitleText: '商品列表',
-    onReachBottomDistance: 100
+    onReachBottomDistance: 100,
+    enablePullDownRefresh: true,
+    backgroundColor: '#eee'
   }
   mixins = [mix]
 }
@@ -26,5 +32,12 @@ export default class extends wepy.page {
 <style lang="less">
 .sep_line {
   border-top: 1px solid #eee;
+}
+.over_line {
+  font-size: 24rpx;
+  text-align: center;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #ddd;
 }
 </style>
