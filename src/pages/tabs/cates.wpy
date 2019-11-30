@@ -1,5 +1,34 @@
 <template>
-  <view>cates</view>
+  <view class="cates_container">
+    <!-- 左边栏 -->
+    <scroll-view scroll-y style="height:{{windowHeight}}px; width:85px">
+      <van-badge-group active="{{ active }}" bind:change="onChange">
+        <van-badge title="{{item.cat_name}}" wx:for="{{categoryList}}" wx:key="index" />
+      </van-badge-group>
+    </scroll-view>
+
+    <!-- 右边栏 -->
+    <scroll-view class="right" scroll-y style="height:{{windowHeight}}px;">
+      <block wx:for="{{secondCategoryList}}" wx:key="index">
+        <!-- 渲染二级分类 -->
+        <van-row>
+          <van-col span="24" style="text-align: center">
+            <text class="cate_title" space="ensp">/{{item.cat_name}}/</text>
+          </van-col>
+        </van-row>
+
+        <!-- 渲染三级分类 -->
+        <van-row>
+          <block wx:for="{{item.children}}" wx:key="index">
+            <van-col span="8" class="cell" @tap="goGoodsList({{item.cat_id}})">
+              <image class="thumb_img" src="{{item.cat_icon}}" />
+              <view class="thumb_title">{{item.cat_name}}</view>
+            </van-col>
+          </block>
+        </van-row>
+      </block>
+    </scroll-view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy'
@@ -10,4 +39,29 @@ export default class extends wepy.page {
 }
 </script>
 <style lang="less">
+.cates_container {
+  display: flex;
+}
+
+.right {
+  .cate_title {
+    font-size: 26rpx;
+    font-weight: bold;
+    display: inline-block;
+    margin: 30rpx 0;
+  }
+  .cell {
+    text-align: center;
+
+    .thumb_img {
+      width: 120rpx;
+      height: 120rpx;
+    }
+
+    .thumb_title {
+      font-size: 24rpx;
+      margin-bottom: 10rpx;
+    }
+  }
+}
 </style>
