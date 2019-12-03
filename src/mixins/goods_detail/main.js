@@ -44,6 +44,10 @@ export default class extends wepy.mixin {
       const addr = this.addressInfo
       const str = addr.provinceName + addr.cityName + addr.countyName + addr.detailInfo
       return str
+    },
+    // 所有已经勾选的数量
+    total() {
+      return this.$parent.globalData.total
     }
   }
 
